@@ -33,12 +33,12 @@
             },
             "PREÇO UNITÁRIO": {
                 "description": "Preço do produto",
-                "bsonType": "number",
+                "bsonType": "decimal",
                 "minimum": 0
             },
             "QUANTIDADE EM ESTOQUE": {
                 "description": "Estoque do produto",
-                "bsonType": "number",
+                "bsonType": "int",
                 "minimum": 0
             },
             "CATEGORIA": {
