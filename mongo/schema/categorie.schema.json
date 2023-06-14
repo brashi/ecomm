@@ -1,0 +1,24 @@
+{
+    "$jsonSchema": {
+        "title": "Categorias",
+        "description": "Coleção de Categorias dos produtos",
+        "bsonType": "object",
+        "required": ["_id", "nome", "status"],
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "nome": {
+                "description": "Nome da categoria",
+                "bsonType": "string",
+                "minLength": 3
+            },
+            "status": {
+                "description": "Status da categoria",
+                "bsonType": "string",
+                "enum": ["ATIVA", "INATIVA"]
+            }
+        },
+        "additionalProperties": false
+    }
+}
