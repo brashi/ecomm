@@ -12,9 +12,16 @@ info:
 servers:
 - url: http://localhost:3000
   description: json-server rodando localmente
+tags:
+  - name: Categorias
+    description: Endpoints de Categorias
+  - name: Produtos
+    description: Endpoints de Produtos
 paths:
   /api/categories:
     get:
+      tags:
+        - Categorias
       summary: Recupera todas as categorias cadastradas
       responses:
         200:
@@ -28,8 +35,33 @@ paths:
           content:
             application/json:
               example: "Not Found"
+  /api/categories/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    get:
+      tags:
+        - Categorias
+      summary: Recupera uma entidade pelo ID
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/category"
+        404:
+          description: Categoria não encontrada
+          content:
+            application/json:
+              example: "Not Found"
   /api/admin/categories:  
     post:
+      tags: 
+        - Categorias
       summary: Cria nova categoria
       requestBody:
         content:
@@ -46,18 +78,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/category"
-  /api/categories/{id}:
+  /api/admin/categories/{id}:
     parameters:
     - name: id
       in: path
       schema:
         type: integer
       required: true
-    get:
-      summary: Recupera uma entidade pelo ID
+    put:
+      tags:
+        - Categorias
+      summary: Alterar dados da categoria.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/putCategory"
       responses:
-        200:
-          description: Sucesso
+        201:
+          description: "Sucesso"
           content:
             application/json:
               schema:
@@ -67,6 +106,54 @@ paths:
           content:
             application/json:
               example: "Not Found"
+    delete:
+      tags:
+        - Categorias
+      summary: Deleta a categoria.
+      responses:
+        200:
+          description: Categoria removida.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/category"
+        404:
+          description: Categoria não encontrada.
+  /api/admin/categories/{id}/update:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    put:
+      tags:
+        - Categorias
+      summary: Altera status da categoria
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/category"
+  /api/admin/products:
+    post:
+      tags:
+        - Produtos
+      summary: Cria um novo produto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/product"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
 components:
   schemas:
     category:
@@ -78,7 +165,31 @@ components:
           type: string
         status:
           type: string
+    putCategory:
+      type: object
+      properties:
+        nome:
+          type: string
+        status:
+          type: string
     categories:
       type: array
       items:
         $ref: "#/components/schemas/category"
+    product:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        slug:
+          type: string
+        precoUnitario:
+          type: string
+        quantidade:
+          type: integer
+        categoriaId:
+          type: integer
