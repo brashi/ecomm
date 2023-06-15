@@ -12,6 +12,9 @@ function processarComando (args) {
             case "--recuperarCategoriaPorId":
                 CategoryService.findCategoryById(args[i+1]);
                 break;
+            case "--inserirCategoria":
+                CategoryService.createCategory(args[i+1])
+                break;
             default:
                 break;
         }
