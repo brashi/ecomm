@@ -13,7 +13,13 @@ function processarComando (args) {
                 CategoryService.findCategoryById(args[i+1]);
                 break;
             case "--inserirCategoria":
-                CategoryService.createCategory(args[i+1])
+                CategoryService.createCategory(args[i+1]);
+                break;
+            case "--atualizarCategoria":
+                CategoryService.updateCategory(args[i+1], args[i+2]);
+                break;
+            case "--excluirCategoria":
+                CategoryService.deleteCategory(args[i+1]);
                 break;
             default:
                 break;
