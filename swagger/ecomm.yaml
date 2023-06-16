@@ -19,6 +19,8 @@ tags:
     description: Endpoints de Produtos
   - name: Usuários
     description: Endpoints administrativos para contas de usuários
+  - name: Pedidos
+    description: Endpoints de pedidos
 paths:
   /api/categories:
     get:
@@ -143,6 +145,22 @@ paths:
     get:
       tags:
         - Produtos
+      parameters:
+        - in: query
+          name: filter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estoqueMinimo:
+                    type: integer
+                  categoria:
+                    type: string
+                  precoMinimo:
+                    type: string
+                  precoMaximo:
+                    type: string
       summary: Lista produtos
       responses:
         200:
@@ -188,7 +206,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/postProduct"
+              $ref: "#/components/schemas/product"
       responses:
         201:
           description: "Sucesso"
@@ -211,7 +229,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/postProduct"
+              $ref: "#/components/schemas/product"
       responses:
         201:
           description: "Sucesso"
@@ -262,7 +280,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/postAccount"
+              $ref: "#/components/schemas/account"
       responses:
         201:
           description: "Sucesso"
@@ -301,7 +319,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/postAccount"
+              $ref: "#/components/schemas/account"
       responses:
         201:
           description: "Sucesso"
@@ -327,7 +345,46 @@ paths:
                 $ref: "#/components/schemas/account"
         404:
           description: "Usuário não encontrado"
-    
+  /api/orders:
+    post:
+      tags:
+        - Pedidos
+      summary: "Cria um novo pedido"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/order"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/order"
+  /api/orders/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    get:
+      tags:
+        - Pedidos
+      summary: "Busca uma entidade pelo ID"
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/order"
+        404:
+          description: "Pedido não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
 components:
   schemas:
     category:
@@ -371,21 +428,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/product"
-    postProduct:
-      type: object
-      properties:
-        nome:
-          type: string
-        descricao:
-          type: string
-        slug:
-          type: string
-        precoUnitario:
-          type: string
-        quantidade:
-          type: integer
-        categoriaId:
-          type: integer
     endereco:
       type: object
       properties:
@@ -422,18 +464,26 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/account"
-    postAccount:
+    itemOrder:
       type: object
       properties:
-        nome:
+        productId:
+          type: integer
+        quantidade:
+          type: integer
+          format: int64
+        unitPrice:
           type: string
-        email:
+        discountValue:
           type: string
-        senha:
-          type: string
-        cpf:
-          type: string
-        telefone:
-          type: string
-        endereco:
+    order:
+      type: object
+      properties:
+        clientAccountId:
+          type: integer
+        deliveryAddress:
           $ref: "#/components/schemas/endereco"
+        itens:
+          type: array
+          items:
+            $ref: "#/components/schemas/itemOrder"
