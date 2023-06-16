@@ -17,6 +17,8 @@ tags:
     description: Endpoints de Categorias
   - name: Produtos
     description: Endpoints de Produtos
+  - name: Usuários
+    description: Endpoints administrativos para contas de usuários
 paths:
   /api/categories:
     get:
@@ -235,6 +237,81 @@ paths:
                 $ref: "#/components/schemas/product"
         404:
           description: "Produto não encontrado"
+  /api/admin/accounts:
+    get:
+      tags:
+        - Usuários
+      summary: Listar usuários
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/accounts"
+        404:
+          description: "Nenhum usuário listado"
+          content:
+            application/json:
+              example: "Not Found"
+    post:
+      tags:
+        - Usuários
+      summary: "Cria uma nova conta de usuário"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postAccount"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+  /api/admin/accounts/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    put:
+      tags:
+        - Usuários
+      summary: "Altera dados de uma conta de usuário"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postAccount"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        404:
+          description: "Usuário não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+    delete:
+      tags:
+        - Usuários
+      summary: "Deleta os dados de uma conta de usuário"
+      responses:
+        200:
+          description: "Usuário removido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        404:
+          description: "Usuário não encontrado"
+    
 components:
   schemas:
     category:
@@ -293,3 +370,54 @@ components:
           type: integer
         categoriaId:
           type: integer
+    endereco:
+      type: object
+      properties:
+        rua:
+          type: string
+        numero:
+          type: string
+        complemento:
+          type: string
+        cep:
+          type: string
+        cidade:
+          type: string
+        estado:
+          type: string
+    account:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        cpf:
+          type: string
+        telefone:
+          type: string
+        endereco:
+          $ref: "#/components/schemas/endereco"
+    accounts:
+      type: array
+      items:
+        $ref: "#/components/schemas/account"
+    postAccount:
+      type: object
+      properties:
+        nome:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        cpf:
+          type: string
+        telefone:
+          type: string
+        endereco:
+          $ref: "#/components/schemas/endereco"
