@@ -137,6 +137,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/category"
+  /api/products:
+    get:
+      tags:
+        - Produtos
+      summary: Lista produtos
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/products"
+        404:
+          description: "Nenhum produto listado"
+          content:
+            application/json:
+              example: "Not Found"
+  /api/products/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    get:
+      tags:
+        - Produtos
+      summary: Recupera uma entidade pelo ID
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        404:
+          description: "Produto não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
   /api/admin/products:
     post:
       tags:
@@ -146,7 +186,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/product"
+              $ref: "#/components/schemas/postProduct"
       responses:
         201:
           description: "Sucesso"
@@ -154,6 +194,47 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/product"
+  /api/admin/products/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    put:
+      tags:
+        - Produtos
+      summary: Altera dados de um produto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postProduct"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        404:
+          description: "Produto não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+    delete:
+      tags:
+        - Produtos
+      summary: Deleta dados de um produto
+      responses:
+        200:
+          description: "Produto removido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        404:
+          description: "Produto não encontrado"
 components:
   schemas:
     category:
@@ -181,6 +262,25 @@ components:
       properties:
         id:
           type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        slug:
+          type: string
+        precoUnitario:
+          type: string
+        quantidade:
+          type: integer
+        categoriaId:
+          type: integer
+    products:
+      type: array
+      items:
+        $ref: "#/components/schemas/product"
+    postProduct:
+      type: object
+      properties:
         nome:
           type: string
         descricao:
