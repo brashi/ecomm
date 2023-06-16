@@ -1,14 +1,14 @@
-use("ecomm");
-let converter = db.products.updateMany(
-    {},
-    [{ $set: { "PREÇO UNITÁRIO": { $toDecimal: "$PREÇO UNITÁRIO" } } }]
+use('ecomm');
+const converter = db.products.updateMany(
+  {},
+  [{ $set: { 'PREÇO UNITÁRIO': { $toDecimal: '$PREÇO UNITÁRIO' } } }],
 );
-let truncar = db.products.updateMany(
-    {},
-    [{ $set: { "PREÇO UNITÁRIO": { $trunc: ["$PREÇO UNITÁRIO", 2] } } }]
+const truncar = db.products.updateMany(
+  {},
+  [{ $set: { 'PREÇO UNITÁRIO': { $trunc: ['$PREÇO UNITÁRIO', 2] } } }],
 );
 
-console.log("-=-=-=-=-=-=- Resultado da conversão: ");
+console.log('-=-=-=-=-=-=- Resultado da conversão: ');
 console.log(converter);
-console.log("-=-=-=-=-=-=- Resultado da truncagem: ");
+console.log('-=-=-=-=-=-=- Resultado da truncagem: ');
 console.log(truncar);
