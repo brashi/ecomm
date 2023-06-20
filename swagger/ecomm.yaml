@@ -1,0 +1,489 @@
+openapi: 3.0.1
+info:
+  title: API - ecomm
+  description: API para manipular dados do ecommerce Ecomm.
+  version: 0.0.1
+  contact:
+    name: Ecomm
+    url: https://github.com/brashi/ecomm
+  license:
+    name: "Licença MIT"
+    url: https://www.mit.edu/~amini/LICENSE.md
+servers:
+- url: http://localhost:3000
+  description: json-server rodando localmente
+tags:
+  - name: Categorias
+    description: Endpoints de Categorias
+  - name: Produtos
+    description: Endpoints de Produtos
+  - name: Usuários
+    description: Endpoints administrativos para contas de usuários
+  - name: Pedidos
+    description: Endpoints de pedidos
+paths:
+  /api/categories:
+    get:
+      tags:
+        - Categorias
+      summary: Recupera todas as categorias cadastradas
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/categories"
+        404:
+          description: "Categorias não encontradas"
+          content:
+            application/json:
+              example: "Not Found"
+  /api/categories/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    get:
+      tags:
+        - Categorias
+      summary: Recupera uma entidade pelo ID
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/category"
+        404:
+          description: Categoria não encontrada
+          content:
+            application/json:
+              example: "Not Found"
+  /api/admin/categories:  
+    post:
+      tags: 
+        - Categorias
+      summary: Cria nova categoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/category"
+  /api/admin/categories/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    put:
+      tags:
+        - Categorias
+      summary: Alterar dados da categoria.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/putCategory"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/category"
+        404:
+          description: Categoria não encontrada
+          content:
+            application/json:
+              example: "Not Found"
+    delete:
+      tags:
+        - Categorias
+      summary: Deleta a categoria.
+      responses:
+        200:
+          description: Categoria removida.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/category"
+        404:
+          description: Categoria não encontrada.
+  /api/admin/categories/{id}/update:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    put:
+      tags:
+        - Categorias
+      summary: Altera status da categoria
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/category"
+  /api/products:
+    get:
+      tags:
+        - Produtos
+      parameters:
+        - in: query
+          name: filter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estoqueMinimo:
+                    type: integer
+                  categoria:
+                    type: string
+                  precoMinimo:
+                    type: string
+                  precoMaximo:
+                    type: string
+      summary: Lista produtos
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/products"
+        404:
+          description: "Nenhum produto listado"
+          content:
+            application/json:
+              example: "Not Found"
+  /api/products/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    get:
+      tags:
+        - Produtos
+      summary: Recupera uma entidade pelo ID
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        404:
+          description: "Produto não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+  /api/admin/products:
+    post:
+      tags:
+        - Produtos
+      summary: Cria um novo produto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/product"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+  /api/admin/products/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    put:
+      tags:
+        - Produtos
+      summary: Altera dados de um produto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/product"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        404:
+          description: "Produto não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+    delete:
+      tags:
+        - Produtos
+      summary: Deleta dados de um produto
+      responses:
+        200:
+          description: "Produto removido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        404:
+          description: "Produto não encontrado"
+  /api/admin/accounts:
+    get:
+      tags:
+        - Usuários
+      summary: Listar usuários
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/accounts"
+        404:
+          description: "Nenhum usuário listado"
+          content:
+            application/json:
+              example: "Not Found"
+    post:
+      tags:
+        - Usuários
+      summary: "Cria uma nova conta de usuário"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/account"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+  /api/admin/accounts/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    get:
+      tags:
+        - Usuários
+      summary: "Recupera uma entidade pelo ID"
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        404:
+          description: "Usuário não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+    put:
+      tags:
+        - Usuários
+      summary: "Altera dados de uma conta de usuário"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/account"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        404:
+          description: "Usuário não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+    delete:
+      tags:
+        - Usuários
+      summary: "Deleta os dados de uma conta de usuário"
+      responses:
+        200:
+          description: "Usuário removido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        404:
+          description: "Usuário não encontrado"
+  /api/orders:
+    post:
+      tags:
+        - Pedidos
+      summary: "Cria um novo pedido"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/order"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/order"
+  /api/orders/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    get:
+      tags:
+        - Pedidos
+      summary: "Busca uma entidade pelo ID"
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/order"
+        404:
+          description: "Pedido não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+components:
+  schemas:
+    category:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        status:
+          type: string
+    putCategory:
+      type: object
+      properties:
+        nome:
+          type: string
+        status:
+          type: string
+    categories:
+      type: array
+      items:
+        $ref: "#/components/schemas/category"
+    product:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        slug:
+          type: string
+        precoUnitario:
+          type: string
+        quantidade:
+          type: integer
+        categoriaId:
+          type: integer
+    products:
+      type: array
+      items:
+        $ref: "#/components/schemas/product"
+    endereco:
+      type: object
+      properties:
+        rua:
+          type: string
+        numero:
+          type: string
+        complemento:
+          type: string
+        cep:
+          type: string
+        cidade:
+          type: string
+        estado:
+          type: string
+    account:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        cpf:
+          type: string
+        telefone:
+          type: string
+        endereco:
+          $ref: "#/components/schemas/endereco"
+    accounts:
+      type: array
+      items:
+        $ref: "#/components/schemas/account"
+    itemOrder:
+      type: object
+      properties:
+        productId:
+          type: integer
+        quantidade:
+          type: integer
+          format: int64
+        unitPrice:
+          type: string
+        discountValue:
+          type: string
+    order:
+      type: object
+      properties:
+        clientAccountId:
+          type: integer
+        deliveryAddress:
+          $ref: "#/components/schemas/endereco"
+        itens:
+          type: array
+          items:
+            $ref: "#/components/schemas/itemOrder"
