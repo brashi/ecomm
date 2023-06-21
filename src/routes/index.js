@@ -3,7 +3,7 @@ import categorias from './categoriasRoutes.js';
 
 const routes = (app) => {
   app.route('/').get((req, res) => {
-    res.status(404).send({ message: 'Nada implementado.' });
+    res.status(200).send({ message: 'Nada implementado.' });
   });
 
   app.use(

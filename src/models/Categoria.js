@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const categoriaSchema = new mongoose.Schema(
   {
-    id: { type: String },
+    _id: { type: mongoose.Types.ObjectId },
     nome: { type: String, required: true },
     status: { type: String, required: true },
   },
