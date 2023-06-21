@@ -12,8 +12,31 @@ class CategoriaController {
 
   static listarCategoriaPorId = async (req, res) => {
     try {
-      const { id } = req.params;
-      await categoriaService.buscarPorId(id, res);
+      await categoriaService.buscarPorId(req, res);
+    } catch (err) {
+      res.status(500).json(`error: ${err}`);
+    }
+  };
+
+  static cadastrarCategoria = async (req, res) => {
+    try {
+      await categoriaService.inserirCategoria(req, res);
+    } catch (err) {
+      res.status(500).json(`error: ${err}`);
+    }
+  };
+
+  static atualizarCategoria = async (req, res) => {
+    try {
+      await categoriaService.atualizarCategoria(req, res);
+    } catch (err) {
+      res.status(500).json(`error: ${err}`);
+    }
+  };
+
+  static excluirCategoria = async (req, res) => {
+    try {
+      await categoriaService.excluirCategoria(req, res);
     } catch (err) {
       res.status(500).json(`error: ${err}`);
     }
