@@ -23,34 +23,42 @@ class CategoriaService {
 
   static async inserirCategoria(req, res) {
     const categoria = new Categoria(req.body);
-    await categoria.save((err) => {
-      if (err) {
-        res.status(500).send({ message: `${err.message} - falha no cadastro.` });
-      } else {
-        res.status(201).send(categoria.toJSON());
-      }
+    await categoria.save().then((entidade) => {
+      res.status(201).send(entidade.toJSON());
     });
   }
 
   static async atualizarCategoria(req, res) {
     const { id } = req.params;
-    await Categoria.findByIdAndUpdate(id, { $set: req.body }, (err) => {
-      if (!err) {
-        res.status(200).send({ message: 'Categoria atualizada com sucesso.' });
+    await Categoria.findByIdAndUpdate(id, { $set: req.body }).then((entidade) => {
+      if (!entidade) {
+        res.status(404).send({ message: 'Categoria não encontrada.' });
       } else {
-        res.status(500).send({ message: err.message });
+        res.status(200).send({ message: 'Categoria atualizada com sucesso.' });
       }
     });
+  }
+
+  static async ativarCategoria(req, res) {
+    const { id } = req.params;
+    res.status(200).json(`${id} teve seu status alterado`);
+    // await Categoria.findByIdAndUpdate(id, { $set: {status}}, (err) => {
+    //     if (!err) {
+    //       res.status(200).send({ message: 'Categoria atualizada com sucesso.' });
+    //     } else {
+    //       res.status(500).send({ message: err.message });
+    //     }
+    //   });
   }
 
   static async excluirCategoria(req, res) {
     const { id } = req.params;
 
-    await Categoria.findByIdAndDelete(id, (err) => {
-      if (!err) {
-        res.status(200).send({ message: 'Categoria deletada com sucesso' });
+    await Categoria.findByIdAndDelete(id).then((entidade) => {
+      if (!entidade) {
+        res.status(404).send({ message: 'Categoria não encontrada.' });
       } else {
-        res.status(500).send({ message: err.message });
+        res.status(200).send({ message: 'Categoria deletada com sucesso.' });
       }
     });
   }

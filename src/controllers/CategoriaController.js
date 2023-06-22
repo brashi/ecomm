@@ -34,6 +34,14 @@ class CategoriaController {
     }
   };
 
+  static ativarCategoria = async (req, res) => {
+    try {
+      await categoriaService.ativarCategoria(req, res);
+    } catch (err) {
+      res.status(500).json(`error: ${err}`);
+    }
+  };
+
   static excluirCategoria = async (req, res) => {
     try {
       await categoriaService.excluirCategoria(req, res);
