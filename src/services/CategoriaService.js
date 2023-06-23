@@ -2,9 +2,14 @@ import mongoose from 'mongoose';
 import Categoria from '../models/Categoria.js';
 
 class CategoriaService {
-  static async buscarTodos() {
-    const busca = await Categoria.find();
-    return busca;
+  static async buscarTodos(req, res) {
+    await Categoria.find().then((entidades) => {
+      if (entidades.length) {
+        res.status(200).json(entidades);
+      } else {
+        res.status(404).json('Nenhuma categoria cadastrada');
+      }
+    });
   }
 
   static async buscarPorId(req, res) {
@@ -30,25 +35,24 @@ class CategoriaService {
 
   static async atualizarCategoria(req, res) {
     const { id } = req.params;
-    await Categoria.findByIdAndUpdate(id, { $set: req.body }).then((entidade) => {
+    await Categoria.findByIdAndUpdate(id, { $set: req.body }, { new: true }).then((entidade) => {
       if (!entidade) {
         res.status(404).send({ message: 'Categoria não encontrada.' });
       } else {
-        res.status(200).send({ message: 'Categoria atualizada com sucesso.' });
+        res.status(200).send({ message: 'Categoria atualizada com sucesso.', entity: entidade.toJSON() });
       }
     });
   }
 
   static async ativarCategoria(req, res) {
     const { id } = req.params;
-    res.status(200).json(`${id} teve seu status alterado`);
-    // await Categoria.findByIdAndUpdate(id, { $set: {status}}, (err) => {
-    //     if (!err) {
-    //       res.status(200).send({ message: 'Categoria atualizada com sucesso.' });
-    //     } else {
-    //       res.status(500).send({ message: err.message });
-    //     }
-    //   });
+    await Categoria.findByIdAndUpdate(id, { $set: { status: 'ATIVA' } }, { new: true }).then((entidade) => {
+      if (!entidade) {
+        res.status(404).send({ message: 'Categoria não encontrada.' });
+      } else {
+        res.status(200).send({ message: 'Categoria atualizada com sucesso.', entity: entidade.toJSON() });
+      }
+    });
   }
 
   static async excluirCategoria(req, res) {

@@ -3,8 +3,7 @@ import categoriaService from '../services/CategoriaService.js';
 class CategoriaController {
   static listarCategorias = async (req, res) => {
     try {
-      const categoriasResultado = await categoriaService.buscarTodos();
-      res.status(200).json(categoriasResultado);
+      await categoriaService.buscarTodos(req, res);
     } catch (err) {
       res.status(500).json(err);
     }

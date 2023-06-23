@@ -12,6 +12,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_HOST_PROD: mongo-ecomm
     volumes:
       - db-mongo-ecomm:/data/db
       - type: bind
