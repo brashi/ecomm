@@ -1,9 +1,9 @@
-import categoriaService from '../services/CategoriaService.js';
+import CategoriaService from '../services/CategoriaService.js';
 
 class CategoriaController {
   static listarCategorias = async (req, res) => {
     try {
-      await categoriaService.buscarTodos(req, res);
+      await CategoriaService.buscarTodos(req, res);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -11,7 +11,7 @@ class CategoriaController {
 
   static listarCategoriaPorId = async (req, res) => {
     try {
-      await categoriaService.buscarPorId(req, res);
+      await CategoriaService.buscarPorId(req, res);
     } catch (err) {
       res.status(500).json(`error: ${err}`);
     }
@@ -19,7 +19,7 @@ class CategoriaController {
 
   static cadastrarCategoria = async (req, res) => {
     try {
-      await categoriaService.inserirCategoria(req, res);
+      await CategoriaService.inserirCategoria(req, res);
     } catch (err) {
       res.status(500).json(`error: ${err}`);
     }
@@ -27,7 +27,7 @@ class CategoriaController {
 
   static atualizarCategoria = async (req, res) => {
     try {
-      await categoriaService.atualizarCategoria(req, res);
+      await CategoriaService.atualizarCategoria(req, res);
     } catch (err) {
       res.status(500).json(`error: ${err}`);
     }
@@ -35,7 +35,7 @@ class CategoriaController {
 
   static ativarCategoria = async (req, res) => {
     try {
-      await categoriaService.ativarCategoria(req, res);
+      await CategoriaService.ativarCategoria(req, res);
     } catch (err) {
       res.status(500).json(`error: ${err}`);
     }
@@ -43,7 +43,7 @@ class CategoriaController {
 
   static excluirCategoria = async (req, res) => {
     try {
-      await categoriaService.excluirCategoria(req, res);
+      await CategoriaService.excluirCategoria(req, res);
     } catch (err) {
       res.status(500).json(`error: ${err}`);
     }
