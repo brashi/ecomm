@@ -3,7 +3,7 @@ import Produto from '../models/Produto.js';
 
 class ProdutoService {
   static async buscarTodos(req, res) {
-    await Produto.find().populate('categoria').then((entidades) => {
+    await Produto.find().then((entidades) => {
       if (entidades.length) {
         res.status(200).json(entidades);
       } else {
@@ -15,7 +15,7 @@ class ProdutoService {
   static async buscarPorId(req, res) {
     const { id } = req.params;
     if (mongoose.Types.ObjectId.isValid(id)) {
-      const busca = await Produto.findById(id).populate('categoria');
+      const busca = await Produto.findById(id);
       if (busca !== null) {
         res.status(200).json(busca);
       } else {
@@ -37,20 +37,9 @@ class ProdutoService {
     const { id } = req.params;
     await Produto.findByIdAndUpdate(id, { $set: req.body }, { new: true }).then((entidade) => {
       if (!entidade) {
-        res.status(404).send({ message: 'Produto não encontrada.' });
+        res.status(404).send({ message: 'Produto não encontrado.' });
       } else {
-        res.status(200).send({ message: 'Produto atualizada com sucesso.', entity: entidade.toJSON() });
-      }
-    });
-  }
-
-  static async ativarProduto(req, res) {
-    const { id } = req.params;
-    await Produto.findByIdAndUpdate(id, { $set: { status: 'ATIVA' } }, { new: true }).then((entidade) => {
-      if (!entidade) {
-        res.status(404).send({ message: 'Produto não encontrada.' });
-      } else {
-        res.status(200).send({ message: 'Produto atualizada com sucesso.', entity: entidade.toJSON() });
+        res.status(200).send({ message: 'Produto atualizado com sucesso.', entity: entidade.toJSON() });
       }
     });
   }
